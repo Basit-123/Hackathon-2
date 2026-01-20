@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm search:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run build:*)",
+      "Bash(python -m py_compile:*)",
+      "Bash(.specify/scripts/bash/check-server.sh:*)",
+      "Bash(python main.py:*)",
+      "Bash(curl:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(npm run dev:*)",
+      "Bash(pip install:*)"
+    ]
+  }
+}
