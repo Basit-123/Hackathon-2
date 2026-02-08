@@ -181,7 +181,7 @@ export default function TasksPage() {
                   key={task.id}
                   task={task}
                   userId={userId}
-                  onUpdate={loadTasks}
+                  onTaskUpdated={loadTasks}
                 />
               ))}
             </ul>
