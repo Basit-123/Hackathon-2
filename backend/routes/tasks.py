@@ -12,7 +12,7 @@ from models import Task, TaskCreate, TaskUpdate, TaskRead
 from db import get_session
 from middleware import verify_user_id_match
 
-router = APIRouter()
+router = APIRouter(prefix="/api", tags=["Tasks"])
 
 
 @router.post("/{user_id}/tasks", response_model=TaskRead, status_code=status.HTTP_201_CREATED)

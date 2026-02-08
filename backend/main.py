@@ -16,6 +16,7 @@ from contextlib import asynccontextmanager
 # Import routes and utilities
 from routes.auth import router as auth_router
 from routes.tasks import router as tasks_router
+from routes.chat import router as chat_router
 from db import engine, init_db
 from middleware import verify_jwt_middleware
 from config import HOST, PORT
@@ -31,11 +32,14 @@ app = FastAPI(
 
 
 # CORS Middleware Configuration
+import os
+
+# Allow all origins for development
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, replace with specific origins
+    allow_origins=["http://localhost:3000", "http://localhost:3001", "http://127.0.0.1:3000"],
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allow_headers=["*"],
 )
 
@@ -47,7 +51,12 @@ async def jwt_middleware(request: Request, call_next):
     Apply JWT verification middleware to protected requests only
 
     Excludes public routes: /auth/signup, /auth/signin, /health, /, /docs, /redoc
+    Also excludes OPTIONS requests for CORS preflight
     """
+    # Skip JWT verification for OPTIONS requests (CORS preflight)
+    if request.method == "OPTIONS":
+        return await call_next(request)
+
     # Check if path is a public route (doesn't require authentication)
     public_paths = ["/auth/signup", "/auth/signin", "/health", "/", "/docs", "/redoc", "/openapi.json"]
 
@@ -84,6 +93,7 @@ app.router.lifespan_context = lifespan
 # Include routers
 app.include_router(auth_router)
 app.include_router(tasks_router)
+app.include_router(chat_router)
 
 
 # Health check endpoint
